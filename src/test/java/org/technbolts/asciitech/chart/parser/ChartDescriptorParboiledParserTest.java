@@ -41,8 +41,8 @@ public class ChartDescriptorParboiledParserTest {
                 "x: [1.0, 2.0, 3.0, 6.4, 8]\n" +
                 "y: [1.0, 23.5, 10, 11, 9.4]\n" +
                 " - color: rgb(55, 170, 200)\n" +
-                " - point: circle, radius: 3.0\n" +
-                " - line: line, width: 2.0\n" +
+                " - point: circle, size: 3.0\n" +
+                " - line: solid, width: 2.0\n" +
                 " - area: fill\n" +
                 "y: [3.0, 5.0, 7.0, 9.0, 11.0]\n" +
                 " - color: rgb(200, 80, 75)\n" +
@@ -61,6 +61,7 @@ public class ChartDescriptorParboiledParserTest {
 
         assertThat(xyNode.getYBlocks()).hasSize(2);
         assertThat(xyNode.getYBlocks().get(0).valuesAsDoubles()).isEqualTo(new double[]{1.0, 23.5, 10, 11, 9.4});
+        assertThat(xyNode.getYBlocks().get(1).valuesAsDoubles()).isEqualTo(new double[]{3.0, 5.0, 7.0, 9.0, 11.0});
 
     }
 }

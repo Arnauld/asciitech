@@ -23,11 +23,18 @@ public class ChartDescriptorParboiledParser extends Parser {
 
     public static AbstractNode parse(String input) {
         ChartDescriptorParboiledParser parser = Parboiled.createParser(ChartDescriptorParboiledParser.class);
-        ParsingResult<Object> result = new TracingParseRunner<Object>(parser.descriptors()).run(input);
+        ParsingResult<Object> result;
+
+        boolean trace = false;
+        if (trace)
+            result = new TracingParseRunner<Object>(parser.descriptors()).run(input);
+        else
+            result = new ReportingParseRunner<Object>(parser.descriptors()).run(input);
+
         if (result.hasErrors()) {
             System.out.println("ChartDescriptorParser.parse(" + result.parseErrors + ")");
-            System.out.println("ChartDescriptorParboiledParser.parse(" + ParseTreeUtils.printNodeTree(result) + ")");
         }
+        System.out.println("ChartDescriptorParboiledParser.parse(" + ParseTreeUtils.printNodeTree(result) + ")");
         return (AbstractNode) result.resultValue;
     }
 
@@ -142,12 +149,62 @@ public class ChartDescriptorParboiledParser extends Parser {
                 ((XYNode.YBlock) peek()).colorAttributes(text.getString()));
     }
 
-    @SuppressSubnodes
     Rule xyLineAttributes() {
-        StringBuilderVar text = new StringBuilderVar();
         return Sequence(Sp(), MINUS, Sp(), "line", COLON, Sp(),
+                push(new LineAttributes()),
+                Optional(
+                        lineAttribute(),
+                        ZeroOrMore(Sp(), COMMA, Sp(), lineAttribute())
+                ),
                 ZeroOrMore(TestNot(Newline()), BaseParser.ANY),
-                ((XYNode.YBlock) peek()).lineAttributes(text.getString()));
+                ((XYNode.YBlock) peek(1)).lineAttributes((LineAttributes) pop())
+        );
+    }
+
+    Rule lineAttribute() {
+        return FirstOf(
+                widthAttribute(),
+                linePattern(),
+                colorValue()
+        );
+    }
+
+    Rule widthAttribute() {
+        return Sequence("width", Sp(), COLON, Sp(),
+                FirstOf(
+                        DecimalFloat(),
+                        IntegerLiteral(),
+                        unknownValue()),
+                ((LineAttributes) peek()).width(match())
+        );
+    }
+
+    Rule linePattern() {
+        return Sequence(FirstOf(
+                        "none",
+                        "solid",
+                        "dashed",
+                        "dotted",
+                        unknownValue()),
+                ((LineAttributes) peek()).pattern(match())
+        );
+    }
+
+    Rule colorValue() {
+        return Sequence(FirstOf(
+                        Sequence("rgb(", Sp(),
+                                IntegerLiteral(), Sp(), COMMA,
+                                IntegerLiteral(), Sp(), COMMA,
+                                IntegerLiteral(), Sp(), ")"),
+                        Sequence("#", OneOrMore(HexDigit())),
+                        unknownValue()
+                ),
+                ((ColorAware) peek()).color(match())
+        );
+    }
+
+    Rule unknownValue() {
+        return ZeroOrMore(TestNot(Newline(), COLON), BaseParser.ANY);
     }
 
     @SuppressSubnodes

@@ -47,7 +47,7 @@ public class XYNode extends ChartNode {
     public static class YBlock implements IgnoredLineAware {
         private StringBuilder ignoredContent = new StringBuilder();
         private Values values;
-        private String lineAttributes;
+        private LineAttributes lineAttributes;
         private String colorAttributes;
         private String pointAttributes;
         private String areaAttributes;
@@ -79,7 +79,7 @@ public class XYNode extends ChartNode {
                     '}';
         }
 
-        public boolean lineAttributes(String lineAttributes) {
+        public boolean lineAttributes(LineAttributes lineAttributes) {
             this.lineAttributes = lineAttributes;
             return true;
         }
