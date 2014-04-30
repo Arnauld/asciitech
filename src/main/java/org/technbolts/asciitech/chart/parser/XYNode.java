@@ -106,5 +106,9 @@ public class XYNode extends ChartNode {
         public PointAttributes pointAttributes() {
             return pointAttributes;
         }
+
+        public LineAttributes lineAttributes() {
+            return lineAttributes;
+        }
     }
 }

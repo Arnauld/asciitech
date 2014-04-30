@@ -5,16 +5,31 @@ package org.technbolts.asciitech.chart.parser;
  */
 public class LineAttributes extends ColorAttributes implements WidthAware, PatternAware, UnknownValueAware {
 
+    private String pattern;
+    private String widthDef;
+
     @Override
-    public boolean width(String match) {
-        System.out.println("LineAttributes.width(" + match + ")");
+    public boolean width(String widthDef) {
+        this.widthDef = widthDef;
         return true;
     }
 
+    public float width() {
+        return Float.parseFloat(widthDef);
+    }
+
+    public boolean isWidthDefined() {
+        return widthDef != null;
+    }
+
     @Override
-    public boolean pattern(String match) {
-        System.out.println("LineAttributes.pattern(" + match + ")");
+    public boolean pattern(String pattern) {
+        this.pattern = pattern;
         return true;
+    }
+
+    public String pattern() {
+        return pattern;
     }
 
     @Override
@@ -22,4 +37,5 @@ public class LineAttributes extends ColorAttributes implements WidthAware, Patte
         System.out.println("LineAttributes.unknown(" + unknown + ")");
         return true;
     }
+
 }

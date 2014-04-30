@@ -33,4 +33,8 @@ public class PointAttributes extends ColorAttributes implements PatternAware, Si
     public float size() {
         return Float.parseFloat(sizeDef);
     }
+
+    public boolean isSizeDefined() {
+        return sizeDef != null;
+    }
 }

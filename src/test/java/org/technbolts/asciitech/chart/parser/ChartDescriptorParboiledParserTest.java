@@ -67,12 +67,23 @@ public class ChartDescriptorParboiledParserTest {
         assertThat(yBlock0.colorAttributes().rgb()).isEqualTo(new float[]{55, 170, 200});
         assertThat(yBlock0.pointAttributes()).isNotNull();
         assertThat(yBlock0.pointAttributes().pattern()).isEqualTo("circle");
+        assertThat(yBlock0.pointAttributes().isSizeDefined()).isTrue();
         assertThat(yBlock0.pointAttributes().size()).isEqualTo(3.0f);
+        assertThat(yBlock0.lineAttributes()).isNotNull();
+        assertThat(yBlock0.lineAttributes().pattern()).isEqualTo("solid");
+        assertThat(yBlock0.lineAttributes().isWidthDefined()).isTrue();
+        assertThat(yBlock0.lineAttributes().width()).isEqualTo(2.0f);
 
         XYNode.YBlock yBlock1 = xyNode.getYBlocks().get(1);
         assertThat(yBlock1.valuesAsDoubles()).isEqualTo(new double[]{3.0, 5.0, 7.0, 9.0, 11.0});
         assertThat(yBlock1.colorAttributes()).isNotNull();
         assertThat(yBlock1.colorAttributes().rgb()).isEqualTo(new float[]{170, 238, 102});
+        assertThat(yBlock1.pointAttributes()).isNotNull();
+        assertThat(yBlock1.pointAttributes().pattern()).isEqualTo("square");
+        assertThat(yBlock1.pointAttributes().isSizeDefined()).isFalse();
+        assertThat(yBlock1.lineAttributes()).isNotNull();
+        assertThat(yBlock1.lineAttributes().pattern()).isEqualTo("none");
+        assertThat(yBlock1.lineAttributes().isWidthDefined()).isFalse();
 
     }
 }
