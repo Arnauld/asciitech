@@ -48,8 +48,8 @@ public class XYNode extends ChartNode {
         private StringBuilder ignoredContent = new StringBuilder();
         private Values values;
         private LineAttributes lineAttributes;
-        private String colorAttributes;
-        private String pointAttributes;
+        private ColorAttributes colorAttributes;
+        private PointAttributes pointAttributes;
         private String areaAttributes;
 
         public boolean ok() {
@@ -84,12 +84,12 @@ public class XYNode extends ChartNode {
             return true;
         }
 
-        public boolean colorAttributes(String colorAttributes) {
+        public boolean colorAttributes(ColorAttributes colorAttributes) {
             this.colorAttributes = colorAttributes;
             return true;
         }
 
-        public boolean pointAttributes(String pointAttributes) {
+        public boolean pointAttributes(PointAttributes pointAttributes) {
             this.pointAttributes = pointAttributes;
             return true;
         }
@@ -97,6 +97,14 @@ public class XYNode extends ChartNode {
         public boolean areaAttributes(String areaAttributes) {
             this.areaAttributes = areaAttributes;
             return true;
+        }
+
+        public ColorAttributes colorAttributes() {
+            return colorAttributes;
+        }
+
+        public PointAttributes pointAttributes() {
+            return pointAttributes;
         }
     }
 }

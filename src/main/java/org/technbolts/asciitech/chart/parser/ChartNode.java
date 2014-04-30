@@ -20,6 +20,6 @@ public abstract class ChartNode extends AbstractNode implements IgnoredLineAware
     }
 
     public boolean displayLegend() {
-        return displayLegend == null ? true : Boolean.parseBoolean(displayLegend);
+        return displayLegend == null || Boolean.parseBoolean(displayLegend);
     }
 }

@@ -20,13 +20,14 @@ public class ChartDescriptorParboiledParserTest {
                 "radius: 0.9\n" +
                 "inner-radius : 0.4\n" +
                 "gap: 0.2\n" +
-                "legend: true\n" +
+                "legend: false\n" +
                 "";
         AbstractNode node = ChartDescriptorParboiledParser.parse(input);
         assertThat(node).isNotNull();
         assertThat(node).isInstanceOf(PieNode.class);
 
         PieNode pieNode = (PieNode) node;
+        assertThat(pieNode.displayLegend()).isFalse();
         assertThat(pieNode.dataAsDoubles()).isEqualTo(new double[]{1.0, 23.5, 19, 11, 9.4}, delta(1e-6));
         assertThat(pieNode.getRadius()).isEqualTo(0.9);
         assertThat(pieNode.getInnerRadius()).isEqualTo(0.4);
@@ -45,7 +46,7 @@ public class ChartDescriptorParboiledParserTest {
                 " - line: solid, width: 2.0\n" +
                 " - area: fill\n" +
                 "y: [3.0, 5.0, 7.0, 9.0, 11.0]\n" +
-                " - color: rgb(200, 80, 75)\n" +
+                " - color: #AE6\n" +
                 " - point: square\n" +
                 " - line: none\n" +
                 " - area: line, gap: 0.3\n" +
@@ -60,8 +61,18 @@ public class ChartDescriptorParboiledParserTest {
         assertThat(xyNode.xAsDoubles()).isEqualTo(new double[]{1.0, 2.0, 3.0, 6.4, 8});
 
         assertThat(xyNode.getYBlocks()).hasSize(2);
-        assertThat(xyNode.getYBlocks().get(0).valuesAsDoubles()).isEqualTo(new double[]{1.0, 23.5, 10, 11, 9.4});
-        assertThat(xyNode.getYBlocks().get(1).valuesAsDoubles()).isEqualTo(new double[]{3.0, 5.0, 7.0, 9.0, 11.0});
+        XYNode.YBlock yBlock0 = xyNode.getYBlocks().get(0);
+        assertThat(yBlock0.valuesAsDoubles()).isEqualTo(new double[]{1.0, 23.5, 10, 11, 9.4});
+        assertThat(yBlock0.colorAttributes()).isNotNull();
+        assertThat(yBlock0.colorAttributes().rgb()).isEqualTo(new float[]{55, 170, 200});
+        assertThat(yBlock0.pointAttributes()).isNotNull();
+        assertThat(yBlock0.pointAttributes().pattern()).isEqualTo("circle");
+        assertThat(yBlock0.pointAttributes().size()).isEqualTo(3.0f);
+
+        XYNode.YBlock yBlock1 = xyNode.getYBlocks().get(1);
+        assertThat(yBlock1.valuesAsDoubles()).isEqualTo(new double[]{3.0, 5.0, 7.0, 9.0, 11.0});
+        assertThat(yBlock1.colorAttributes()).isNotNull();
+        assertThat(yBlock1.colorAttributes().rgb()).isEqualTo(new float[]{170, 238, 102});
 
     }
 }

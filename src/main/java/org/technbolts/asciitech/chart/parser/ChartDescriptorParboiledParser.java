@@ -11,6 +11,7 @@ import org.parboiled.parserunners.TracingParseRunner;
 import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
 import org.parboiled.support.StringBuilderVar;
+import org.parboiled.support.StringVar;
 import org.technbolts.asciitech.parser.Parser;
 import org.technbolts.asciitech.parser.ast.AbstractNode;
 import org.technbolts.asciitech.parser.ast.Values;
@@ -143,10 +144,15 @@ public class ChartDescriptorParboiledParser extends Parser {
 
     @SuppressSubnodes
     Rule xyColorAttributes() {
-        StringBuilderVar text = new StringBuilderVar();
         return Sequence(Sp(), MINUS, Sp(), "color", COLON, Sp(),
-                ZeroOrMore(TestNot(Newline()), BaseParser.ANY),
-                ((XYNode.YBlock) peek()).colorAttributes(text.getString()));
+                push(new ColorAttributes()),
+                Optional(
+                        colorAttribute(),
+                        ZeroOrMore(Sp(), COMMA, Sp(), colorAttribute())
+                ),
+                unknownValue(),
+                ((XYNode.YBlock) peek(1)).colorAttributes((ColorAttributes) pop())
+        );
     }
 
     Rule xyLineAttributes() {
@@ -161,52 +167,6 @@ public class ChartDescriptorParboiledParser extends Parser {
         );
     }
 
-    Rule lineAttribute() {
-        return FirstOf(
-                widthAttribute(),
-                linePattern(),
-                colorValue()
-        );
-    }
-
-    Rule widthAttribute() {
-        return Sequence("width", Sp(), COLON, Sp(),
-                FirstOf(
-                        DecimalFloat(),
-                        IntegerLiteral(),
-                        unknownValue()),
-                ((LineAttributes) peek()).width(match())
-        );
-    }
-
-    Rule linePattern() {
-        return Sequence(FirstOf(
-                        "none",
-                        "solid",
-                        "dashed",
-                        "dotted",
-                        unknownValue()),
-                ((LineAttributes) peek()).pattern(match())
-        );
-    }
-
-    Rule colorValue() {
-        return Sequence(FirstOf(
-                        Sequence("rgb(", Sp(),
-                                IntegerLiteral(), Sp(), COMMA,
-                                IntegerLiteral(), Sp(), COMMA,
-                                IntegerLiteral(), Sp(), ")"),
-                        Sequence("#", OneOrMore(HexDigit())),
-                        unknownValue()
-                ),
-                ((ColorAware) peek()).color(match())
-        );
-    }
-
-    Rule unknownValue() {
-        return ZeroOrMore(TestNot(Newline(), COLON), BaseParser.ANY);
-    }
-
     @SuppressSubnodes
     Rule xyAreaAttributes() {
         StringBuilderVar text = new StringBuilderVar();
@@ -219,8 +179,13 @@ public class ChartDescriptorParboiledParser extends Parser {
     Rule xyPointAttributes() {
         StringBuilderVar text = new StringBuilderVar();
         return Sequence(Sp(), MINUS, Sp(), "point", COLON, Sp(),
+                push(new PointAttributes()),
+                Optional(pointAttribute(),
+                        ZeroOrMore(Sp(), COMMA, Sp(), pointAttribute())
+                ),
                 ZeroOrMore(TestNot(Newline()), BaseParser.ANY),
-                ((XYNode.YBlock) peek()).pointAttributes(text.getString()));
+                ((XYNode.YBlock) peek(1)).pointAttributes((PointAttributes) pop())
+        );
     }
 
     @SuppressSubnodes
@@ -229,6 +194,92 @@ public class ChartDescriptorParboiledParser extends Parser {
                 push(new Values()),
                 LBRK, Sp(), CommaOrSpaceSeparatedValues(), Sp(), RBRK, Sp(),
                 ((XYNode.YBlock) peek(1)).values((Values) pop()));
+    }
+
+    // ------------------------------------------------------------------------
+    //
+    //  Shared Attributes
+    //
+    // ------------------------------------------------------------------------
+
+    Rule pointAttribute() {
+        return FirstOf(
+                sizeAttribute(),
+                pointPattern(),
+                colorValue()
+
+        );
+    }
+
+
+    Rule sizeAttribute() {
+        return Sequence(
+                Optional(Sequence("size", Sp(), COLON, Sp())),
+                FirstOf(
+                        DecimalFloat(),
+                        IntegerLiteral()),
+                ((SizeAware) peek()).size(match())
+        );
+    }
+
+    Rule pointPattern() {
+        return Sequence(asciiOrDashedString(),
+                ((PatternAware) peek()).pattern(match())
+        );
+    }
+
+    Rule lineAttribute() {
+        return FirstOf(
+                widthAttribute(),
+                linePattern(),
+                colorValue()
+        );
+    }
+
+    Rule colorAttribute() {
+        return colorValue();
+    }
+
+    Rule widthAttribute() {
+        return Sequence(
+                Optional(Sequence("width", Sp(), COLON, Sp())),
+                FirstOf(
+                        DecimalFloat(),
+                        IntegerLiteral()),
+                ((WidthAware) peek()).width(match())
+        );
+    }
+
+    Rule linePattern() {
+        return Sequence(
+                asciiOrDashedString(),
+                ((PatternAware) peek()).pattern(match())
+        );
+    }
+
+    Rule colorValue() {
+        StringVar r = new StringVar();
+        StringVar g = new StringVar();
+        StringVar b = new StringVar();
+
+        return FirstOf(
+                Sequence("rgb(", Sp(),
+                        Sequence(FirstOf(DecimalFloat(), IntegerLiteral()), r.set(match()), Sp(), COMMA, Sp()),
+                        Sequence(FirstOf(DecimalFloat(), IntegerLiteral()), g.set(match()), Sp(), COMMA, Sp()),
+                        Sequence(FirstOf(DecimalFloat(), IntegerLiteral()), b.set(match()), Sp(), ")"),
+                        ((ColorAware) peek()).rgb(r.get(), g.get(), b.get())),
+                Sequence("#", OneOrMore(HexDigit()),
+                        ((ColorAware) peek()).hex(match())),
+                unknownValue()
+        );
+    }
+
+    Rule unknownValue() {
+        return Sequence(ZeroOrMore(
+                        TestNot(Newline()),
+                        TestNot(COLON), BaseParser.ANY),
+                ((UnknownValueAware) peek()).unknown(match())
+        );
     }
 
     // ------------------------------------------------------------------------
@@ -254,6 +305,12 @@ public class ChartDescriptorParboiledParser extends Parser {
     boolean debug(String s) {
         System.out.println(s); // set breakpoint here if required
         return true;
+    }
+
+    @SuppressSubnodes
+    Rule asciiOrDashedString() {
+        return OneOrMore(
+                FirstOf(Letter(), Ch('-')));
     }
 
     @SuppressSubnodes
