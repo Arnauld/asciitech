@@ -73,6 +73,9 @@ public class ChartDescriptorParboiledParserTest {
         assertThat(yBlock0.lineAttributes().pattern()).isEqualTo("solid");
         assertThat(yBlock0.lineAttributes().isWidthDefined()).isTrue();
         assertThat(yBlock0.lineAttributes().width()).isEqualTo(2.0f);
+        assertThat(yBlock0.areaAttributes()).isNotNull();
+        assertThat(yBlock0.areaAttributes().pattern()).isEqualTo("fill");
+        assertThat(yBlock0.areaAttributes().isGapDefined()).isFalse();
 
         XYNode.YBlock yBlock1 = xyNode.getYBlocks().get(1);
         assertThat(yBlock1.valuesAsDoubles()).isEqualTo(new double[]{3.0, 5.0, 7.0, 9.0, 11.0});
@@ -84,6 +87,10 @@ public class ChartDescriptorParboiledParserTest {
         assertThat(yBlock1.lineAttributes()).isNotNull();
         assertThat(yBlock1.lineAttributes().pattern()).isEqualTo("none");
         assertThat(yBlock1.lineAttributes().isWidthDefined()).isFalse();
+        assertThat(yBlock1.areaAttributes()).isNotNull();
+        assertThat(yBlock1.areaAttributes().pattern()).isEqualTo("line");
+        assertThat(yBlock1.areaAttributes().isGapDefined()).isTrue();
+        assertThat(yBlock1.areaAttributes().gap()).isEqualTo(0.3f);
 
     }
 }

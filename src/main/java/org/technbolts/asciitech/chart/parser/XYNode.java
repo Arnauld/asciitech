@@ -50,7 +50,7 @@ public class XYNode extends ChartNode {
         private LineAttributes lineAttributes;
         private ColorAttributes colorAttributes;
         private PointAttributes pointAttributes;
-        private String areaAttributes;
+        private AreaAttributes areaAttributes;
 
         public boolean ok() {
             return true;
@@ -94,7 +94,7 @@ public class XYNode extends ChartNode {
             return true;
         }
 
-        public boolean areaAttributes(String areaAttributes) {
+        public boolean areaAttributes(AreaAttributes areaAttributes) {
             this.areaAttributes = areaAttributes;
             return true;
         }
@@ -109,6 +109,10 @@ public class XYNode extends ChartNode {
 
         public LineAttributes lineAttributes() {
             return lineAttributes;
+        }
+
+        public AreaAttributes areaAttributes() {
+            return areaAttributes;
         }
     }
 }

@@ -168,16 +168,7 @@ public class ChartDescriptorParboiledParser extends Parser {
     }
 
     @SuppressSubnodes
-    Rule xyAreaAttributes() {
-        StringBuilderVar text = new StringBuilderVar();
-        return Sequence(Sp(), MINUS, Sp(), "area", COLON, Sp(),
-                ZeroOrMore(TestNot(Newline()), BaseParser.ANY),
-                ((XYNode.YBlock) peek()).areaAttributes(text.getString()));
-    }
-
-    @SuppressSubnodes
     Rule xyPointAttributes() {
-        StringBuilderVar text = new StringBuilderVar();
         return Sequence(Sp(), MINUS, Sp(), "point", COLON, Sp(),
                 push(new PointAttributes()),
                 Optional(pointAttribute(),
@@ -187,6 +178,19 @@ public class ChartDescriptorParboiledParser extends Parser {
                 ((XYNode.YBlock) peek(1)).pointAttributes((PointAttributes) pop())
         );
     }
+
+    @SuppressSubnodes
+    Rule xyAreaAttributes() {
+        return Sequence(Sp(), MINUS, Sp(), "area", COLON, Sp(),
+                push(new AreaAttributes()),
+                Optional(areaAttribute(),
+                        ZeroOrMore(Sp(), COMMA, Sp(), areaAttribute())
+                ),
+                ZeroOrMore(TestNot(Newline()), BaseParser.ANY),
+                ((XYNode.YBlock) peek(1)).areaAttributes((AreaAttributes) pop())
+        );
+    }
+
 
     @SuppressSubnodes
     Rule xyYs() {
@@ -208,6 +212,33 @@ public class ChartDescriptorParboiledParser extends Parser {
                 pointPattern(),
                 colorValue()
 
+        );
+    }
+
+    Rule areaAttribute() {
+        return FirstOf(
+                gapAttribute(),
+                areaPattern(),
+                colorValue()
+
+        );
+    }
+
+
+    Rule gapAttribute() {
+        return Sequence(
+                Optional(Sequence("gap", Sp(), COLON, Sp())),
+                FirstOf(
+                        DecimalFloat(),
+                        IntegerLiteral()),
+                ((GapAware) peek()).gap(match())
+        );
+    }
+
+
+    Rule areaPattern() {
+        return Sequence(asciiOrDashedString(),
+                ((PatternAware) peek()).pattern(match())
         );
     }
 
