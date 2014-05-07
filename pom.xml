@@ -69,6 +69,7 @@
             <groupId>ditaa</groupId>
             <artifactId>ditaa</artifactId>
             <version>0.9</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -79,6 +80,7 @@
             <groupId>jlatexmath</groupId>
             <artifactId>jlatexmath</artifactId>
             <version>1.0.3</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -89,6 +91,7 @@
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml</artifactId>
             <version>${plantuml.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -99,12 +102,14 @@
             <groupId>de.erichseifert</groupId>
             <artifactId>gral</artifactId>
             <version>0.10</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>de.erichseifert</groupId>
             <artifactId>VectorGraphics2D</artifactId>
             <version>0.9.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
