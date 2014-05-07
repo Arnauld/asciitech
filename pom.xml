@@ -31,9 +31,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:Arnauld/cucumber-contrib.git</connection>
-        <developerConnection>scm:git:git@github.com:Arnauld/cucumber-contrib.git</developerConnection>
-        <url>git@github.com:Arnauld/cucumber-contrib.git</url>
+        <connection>scm:git:git@github.com:Arnauld/asciitech.git</connection>
+        <developerConnection>scm:git:git@github.com:Arnauld/asciitech.git</developerConnection>
+        <url>git@github.com:Arnauld/asciitech.git</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -291,7 +291,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <keyname>AC9D96AC</keyname>
+                            <keyname>9E5867B7</keyname>
                         </configuration>
                     </plugin>
                 </plugins>
