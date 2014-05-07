@@ -1,6 +1,7 @@
 package org.technbolts.asciitech.chart.parser;
 
 import org.parboiled.common.ImmutableList;
+import org.technbolts.asciitech.chart.ChartType;
 import org.technbolts.asciitech.parser.ast.Node;
 import org.technbolts.asciitech.parser.ast.Values;
 import org.technbolts.asciitech.parser.ast.Visitor;
@@ -15,6 +16,10 @@ public class XYNode extends ChartNode {
 
     private Values xs = new Values();
     private List<YBlock> yBlocks = new ArrayList<YBlock>();
+
+    public ChartType chartType() {
+        return ChartType.XY;
+    }
 
     @Override
     public void accept(Visitor visitor) {

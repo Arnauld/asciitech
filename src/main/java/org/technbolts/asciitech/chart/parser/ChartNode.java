@@ -1,5 +1,6 @@
 package org.technbolts.asciitech.chart.parser;
 
+import org.technbolts.asciitech.chart.ChartType;
 import org.technbolts.asciitech.parser.ast.AbstractNode;
 
 /**
@@ -8,6 +9,8 @@ import org.technbolts.asciitech.parser.ast.AbstractNode;
 public abstract class ChartNode extends AbstractNode implements IgnoredLineAware {
     private String displayLegend;
     private StringBuilder ignoredContent = new StringBuilder();
+
+    public abstract ChartType chartType();
 
     public boolean displayLegend(String displayLegend) {
         this.displayLegend = displayLegend.trim();

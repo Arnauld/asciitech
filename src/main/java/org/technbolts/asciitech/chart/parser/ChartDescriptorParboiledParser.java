@@ -69,9 +69,9 @@ public class ChartDescriptorParboiledParser extends Parser {
     @SuppressSubnodes
     Rule pieData() {
         return Sequence(Sp(), "data", Sp(), COLON, Sp(),
-                push(((PieNode) peek()).data()),
+                push(new Values()),
                 LBRK, Sp(), CommaOrSpaceSeparatedValues(), Sp(), RBRK, Sp(),
-                ((Values) pop()).ok());
+                ((PieNode) peek(1)).data((Values)pop()));
     }
 
     @SuppressSubnodes

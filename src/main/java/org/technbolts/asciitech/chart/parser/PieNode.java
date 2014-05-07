@@ -1,6 +1,7 @@
 package org.technbolts.asciitech.chart.parser;
 
 import org.parboiled.common.ImmutableList;
+import org.technbolts.asciitech.chart.ChartType;
 import org.technbolts.asciitech.parser.ast.Node;
 import org.technbolts.asciitech.parser.ast.Values;
 import org.technbolts.asciitech.parser.ast.Visitor;
@@ -12,10 +13,14 @@ import java.util.List;
  */
 public class PieNode extends ChartNode {
 
-    private Values data = new Values();
+    private Values data;
     private String radius;
     private String innerRadius;
     private String gap;
+
+    public ChartType chartType() {
+        return ChartType.Pie;
+    }
 
     @Override
     public void accept(Visitor visitor) {
@@ -27,24 +32,41 @@ public class PieNode extends ChartNode {
         return ImmutableList.of();
     }
 
-    public Values data() {
-        return data;
+    public boolean data(Values data) {
+        this.data = data;
+        return false;
+    }
+
+    public boolean isDataDefined() {
+        return data != null;
     }
 
     public double[] dataAsDoubles() {
         return data.toDoubles();
     }
 
-    public Double getRadius() {
-        return parseDouble(radius);
+    public double radius() {
+        return Double.parseDouble(radius);
     }
 
-    public Double getInnerRadius() {
-        return parseDouble(innerRadius);
+    public boolean isRadiusDefined() {
+        return radius != null;
     }
 
-    public Double getGap() {
-        return parseDouble(gap);
+    public double innerRadius() {
+        return Double.parseDouble(innerRadius);
+    }
+
+    public boolean isInnerRadiusDefined() {
+        return innerRadius != null;
+    }
+
+    public double gap() {
+        return Double.parseDouble(gap);
+    }
+
+    public boolean isGapDefined() {
+        return gap != null;
     }
 
     public boolean radius(String radius) {
@@ -60,10 +82,6 @@ public class PieNode extends ChartNode {
     public boolean gap(String gap) {
         this.gap = gap;
         return true;
-    }
-
-    private static Double parseDouble(String value) {
-        return value == null ? null : Double.parseDouble(value);
     }
 
 }

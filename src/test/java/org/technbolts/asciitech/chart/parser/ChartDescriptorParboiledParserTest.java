@@ -29,9 +29,9 @@ public class ChartDescriptorParboiledParserTest {
         PieNode pieNode = (PieNode) node;
         assertThat(pieNode.displayLegend()).isFalse();
         assertThat(pieNode.dataAsDoubles()).isEqualTo(new double[]{1.0, 23.5, 19, 11, 9.4}, delta(1e-6));
-        assertThat(pieNode.getRadius()).isEqualTo(0.9);
-        assertThat(pieNode.getInnerRadius()).isEqualTo(0.4);
-        assertThat(pieNode.getGap()).isEqualTo(0.2);
+        assertThat(pieNode.radius()).isEqualTo(0.9);
+        assertThat(pieNode.innerRadius()).isEqualTo(0.4);
+        assertThat(pieNode.gap()).isEqualTo(0.2);
 
     }
 

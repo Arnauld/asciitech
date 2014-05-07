@@ -14,7 +14,7 @@ public class ChartPieDescriptor extends ChartDescriptor {
         return ChartType.Pie;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(Double radius) {
         this.radius = radius;
     }
 
@@ -22,7 +22,7 @@ public class ChartPieDescriptor extends ChartDescriptor {
         return radius;
     }
 
-    public void setInnerRadius(double innerRadius) {
+    public void setInnerRadius(Double innerRadius) {
         this.innerRadius = innerRadius;
     }
 

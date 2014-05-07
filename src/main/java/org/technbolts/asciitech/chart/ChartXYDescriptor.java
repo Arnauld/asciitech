@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class ChartXYDescriptor extends ChartDescriptor {
     private double[] xs;
-    private List<double[]> yss = new ArrayList<double[]>();
+    private List<YBlock> yblocks = new ArrayList<YBlock>();
 
     @Override
     public ChartType getType() {
@@ -24,26 +24,54 @@ public class ChartXYDescriptor extends ChartDescriptor {
     }
 
     public int getSeriesCount() {
-        return yss.size();
+        return yblocks.size();
     }
 
-    public List<double[]> xyFlatten() {
-        int nbCol = getSeriesCount() + 1;
-        List<double[]> values = new ArrayList<double[]>(xs.length);
+    public void addBlock(YBlock yblock) {
+        yblocks.add(yblock);
+    }
+
+    public void traverseValues(RowVisitor visitor) {
+        int nb = yblocks.size();
+
         for (int i = 0; i < xs.length; i++) {
-            int index = 0;
-            double[] row = new double[nbCol];
-
-            row[index++] = xs[i];
-            for (int j = 1; j < nbCol; j++) {
-                row[index++] = yss.get(j - 1)[i];
+            double x = xs[i];
+            Double[] row = new Double[nb + 1];
+            row[0] = x;
+            for (int j = 0; j < nb; j++) {
+                row[j + 1] = yblocks.get(j).valueAt(i);
             }
-            values.add(row);
+
+            visitor.visit(row);
         }
-        return values;
     }
 
-    public void addYs(double[] ys) {
-        yss.add(ys);
+    public PointDescriptor getPointDescriptor(int index) {
+        return yblocks.get(index).getPointDescriptor();
+    }
+
+    public interface RowVisitor {
+        void visit(Double... values);
+    }
+
+    public static class YBlock {
+        private final double[] values;
+        private PointDescriptor pointDescriptor;
+
+        public YBlock(double[] values) {
+            this.values = values;
+        }
+
+        public PointDescriptor getPointDescriptor() {
+            return pointDescriptor;
+        }
+
+        public void setPointDescriptor(PointDescriptor pointDescriptor) {
+            this.pointDescriptor = pointDescriptor;
+        }
+
+        public Double valueAt(int i) {
+            return values[i];
+        }
     }
 }
