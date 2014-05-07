@@ -38,3 +38,28 @@ Licenses
 
 * GRAL uses the ​GNU Lesser General Public License (LGPL v3)
 * jlatexmath [license](http://forge.scilab.org/index.php/p/jlatexmath/source/tree/master/LICENSE)
+
+
+Maven Local Repository
+----------------------
+
+    mvn install:install-file  -Dfile=tmp/ditaa-0.9.jar \
+                              -DgroupId=ditaa \
+                              -DartifactId=ditaa \
+                              -Dversion=0.9\
+                              -Dpackaging=jar \
+                              -DlocalRepositoryPath=repo/
+
+    mvn install:install-file  -Dfile=tmp/gral-core-0.10.jar \
+                              -DgroupId=de.erichseifert \
+                              -DartifactId=gral \
+                              -Dversion=0.10\
+                              -Dpackaging=jar \
+                              -DlocalRepositoryPath=repo/
+
+    mvn install:install-file  -Dfile=tmp/VectorGraphics2D-0.9.1.jar \
+                              -DgroupId=de.erichseifert \
+                              -DartifactId=VectorGraphics2D \
+                              -Dversion=0.9.1\
+                              -Dpackaging=jar \
+                              -DlocalRepositoryPath=repo/
