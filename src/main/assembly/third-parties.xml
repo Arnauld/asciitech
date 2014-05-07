@@ -14,10 +14,12 @@
             <includes>
                 <include>ditaa:*:jar</include>
                 <include>jlatexmath:*:jar</include>
-                <include>gral:*:jar</include>
+                <include>de.erichseifert:*:jar</include>
+                <include>net.sourceforge.plantuml:*:jar</include>
             </includes>
             <unpack>true</unpack>
             <outputDirectory>/</outputDirectory>
+            <scope>provided</scope>
         </dependencySet>
     </dependencySets>
 </assembly>
