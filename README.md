@@ -33,3 +33,8 @@ Library dependency:
   that can convert diagrams drawn using ascii art into proper bitmap graphics.
 * [jlatexmath](http://forge.scilab.org/index.php/p/jlatexmath/): JLaTeXMath is a Java library.
   Its main purpose is to display mathematical formulas written in LaTeX.
+
+Licenses
+
+* GRAL uses the ​GNU Lesser General Public License (LGPL v3)
+* jlatexmath [license](http://forge.scilab.org/index.php/p/jlatexmath/source/tree/master/LICENSE)
